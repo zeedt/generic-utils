@@ -20,9 +20,9 @@ public class RestApiClient {
             HttpEntity httpEntity = getHttpEntityForRequest(requestData,headers);
             ResponseEntity<T> responseEntity = restTemplate.exchange(url, HttpMethod.POST,httpEntity,claz);
             return responseEntity;
-        } catch (RestClientException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw new Exception(e);
         }
     }
 
@@ -33,10 +33,39 @@ public class RestApiClient {
             HttpEntity httpEntity = getHttpEntityForRequest(requestData,headers);
             ResponseEntity<T> responseEntity = restTemplate.exchange(url, HttpMethod.POST,httpEntity,claz);
             return (responseEntity!=null) ? responseEntity.getBody() : null;
-        } catch (RestClientException e) {
-            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
         }
     }
+
+    public <T,V> ResponseEntity<T> apiGetAndGetResponseEntity (String url, Class<T> claz, Object requestData,
+                                                        HashMap<String,String> headers) throws Exception {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity httpEntity = getHttpEntityForRequest(requestData,headers);
+            ResponseEntity<T> responseEntity = restTemplate.exchange(url, HttpMethod.GET,httpEntity,claz);
+            return responseEntity;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        }
+    }
+
+    public <T,V> T apiGetAndGetClass (String url, Class<T> claz, Object requestData,
+                                                        HashMap<String,String> headers) throws Exception {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity httpEntity = getHttpEntityForRequest(requestData,headers);
+            ResponseEntity<T> responseEntity = restTemplate.exchange(url, HttpMethod.GET,httpEntity,claz);
+            return (responseEntity!=null) ? responseEntity.getBody() : null;
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+    }
+
+
+
 
     public <T,V> T apiPostResponse (String url, Class<T> claz, Object requestData,
                                                         HashMap<String,String> headers) {
