@@ -20,11 +20,11 @@ import java.util.HashMap;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ContextConfiguration(classes = {DateUtils.class})
+@ContextConfiguration(classes = {DateUtils.class,RestApiClient.class})
 public class GenericUtilsApplicationTests {
 
-//	@Autowired
-//	private RestApiClient restApiClient;
+	@Autowired
+	private RestApiClient restApiClient;
 
 	@Autowired
 	private DateUtils dateUtil;
@@ -48,6 +48,16 @@ public class GenericUtilsApplicationTests {
 	@Test
 	public void convertDate() throws ParseException {
 		dateUtil.convertStringToDate("2018-01-03","yyyy-mm-dd");
+	}
+
+	@Test
+	public void testSomething() throws Exception {
+		HashMap<String, String> headers = new HashMap<>();
+		headers.put("Authorization", "Bearer d0cc11a7-63a7-4b60-ba43-f806c5650c94");
+		MultiValueMap<String, Object> request = new LinkedMultiValueMap();
+		String url = "http://127.0.0.1:7071/course/fetchAll";
+		ResponseEntity<Object> object = restApiClient.apiGetAndGetResponseEntity(url, Object.class,null,headers);
+		System.out.println("Done");
 	}
 
 }
